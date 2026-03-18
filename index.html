@@ -44,13 +44,27 @@
             }
         }
 
-        /* --- BACKGROUND THEMES --- 
-           Nantinya ini bisa diganti pakai background-image url('...') dari localhost kamu
-        */
-        .bg-system { background: linear-gradient(135deg, #0f172a, #020617); }
-        .bg-awkward { background: linear-gradient(135deg, #a78bfa, #4c1d95); }
-        .bg-jogja { background: linear-gradient(135deg, #fdba74, #9a3412); }
-        .bg-eid { background: linear-gradient(135deg, #064e3b, #022c22); }
+        /* --- 1. BACKGROUND THEMES (GANTI LINK IMGUR DI SINI) --- */
+        .bg-system { 
+            /* Background Sistem / Awal */
+            background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop'); /* GANTI LINK IMGUR BG 1 */
+            background-size: cover; background-position: center;
+        }
+        .bg-awkward { 
+            /* Background Awkward / Canggung */
+            background-image: url('https://images.unsplash.com/photo-1557683311-eac922347aa1?q=80&w=2029&auto=format&fit=crop'); /* GANTI LINK IMGUR BG 2 */
+            background-size: cover; background-position: center;
+        }
+        .bg-jogja { 
+            /* Background Memori Jogja */
+            background-image: url('https://images.unsplash.com/photo-1584313262657-3fb2e3792ce1?q=80&w=2070&auto=format&fit=crop'); /* GANTI LINK IMGUR BG 3 */
+            background-size: cover; background-position: center;
+        }
+        .bg-eid { 
+            /* Background Lebaran */
+            background-image: url('https://images.unsplash.com/photo-1584553421349-355dbce02201?q=80&w=2070&auto=format&fit=crop'); /* GANTI LINK IMGUR BG 4 */
+            background-size: cover; background-position: center;
+        }
         
         /* Slow Pan/Zoom for Background to make it feel alive */
         @keyframes bgZoom {
@@ -197,18 +211,15 @@
         <!-- 1. Background Layer -->
         <div id="bg-layer" class="absolute inset-0 bg-system bg-active">
             <!-- Grid overlay for visual texture -->
-            <div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>
+            <div class="absolute inset-0 opacity-20 bg-black/40" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>
         </div>
 
         <canvas id="confetti-canvas" class="hidden absolute inset-0 z-40 pointer-events-none"></canvas>
 
         <!-- 2. Sprite Layer (Uses actual <img> now) -->
         <div id="sprite-layer">
-            <!-- 
-                Ubah 'src' ini nanti ke path gambar localhost mu 
-                Contoh: src="assets/adisa_senyum.png" 
-            -->
-            <img id="char-sprite" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600' viewBox='0 0 400 600'%3E%3Crect width='400' height='600' fill='rgba(255,255,255,0.1)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-family='sans-serif' font-size='20' text-anchor='middle'%3E[Placeholder Sprite 1]%3C/text%3E%3C/svg%3E" alt="Karakter" class="anim-breathe opacity-0">
+            <!-- Initial blank SVG placeholder -->
+            <img id="char-sprite" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E" alt="Karakter Adisa" class="anim-breathe opacity-0">
         </div>
 
         <!-- Vignette/Shadow to make dialogue text readable -->
@@ -315,33 +326,27 @@
             });
         }
 
-        /* --- STORY DATA WITH LOCALHOST IMAGES ---
-           Di bagian 'image:', ganti dengan path fotomu.
-           Contoh: image: 'assets/sprite_1.png'
-        */
+        /* --- 2. STORY DATA & CHARACTER SPRITES (GANTI LINK IMGUR DI SINI) --- */
+        // Untuk mencoba, saya beri placeholder gambar yang transparan.
+        // Ganti URL yang ada di 'image: ...' dengan link Imgur kamu!
         
-        // Placeholder image generator for demo purposes
-        function getPlaceholder(num, color) {
-            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600' viewBox='0 0 400 600'%3E%3Crect width='400' height='600' fill='${color}'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-family='sans-serif' font-size='24' text-anchor='middle'%3E[Sprite ${num}]%3C/text%3E%3C/svg%3E`;
-        }
-
         const story = {
             "start": {
                 speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-system", 
-                image: getPlaceholder(1, '#1e3a8a'), // GANTI INI: 'assets/sprite_1.png'
+                image: 'https://dummyimage.com/400x600/1e3a8a/fff.png&text=Sprite+1', // GANTI LINK IMGUR SPRITE 1
                 text: "Memuat memori dari: Adisa Nawfal... Target sinkronisasi: Zulian.",
                 next: "n2"
             },
             "n2": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-system", 
-                image: getPlaceholder(2, '#064e3b'), // GANTI INI: 'assets/sprite_2.png'
+                image: 'https://dummyimage.com/400x600/064e3b/fff.png&text=Sprite+2', // GANTI LINK IMGUR SPRITE 2
                 text: "Zulian Fatimatuzzahro Hurul Aini... Namamu masih aja kepanjangan buat diucapin dalam satu napas.",
                 anim: "anim-pop",
                 next: "n3"
             },
             "n3": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: getPlaceholder(3, '#4c1d95'), // GANTI INI: 'assets/sprite_3.png'
+                image: 'https://dummyimage.com/400x600/4c1d95/fff.png&text=Sprite+3', // GANTI LINK IMGUR SPRITE 3
                 text: "Ga kerasa ya udah hampir 4 tahun kita LDR-an.",
                 anim: "anim-pop",
                 next: "n4",
@@ -349,13 +354,13 @@
             },
             "n4": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: getPlaceholder(4, '#4c1d95'), // GANTI INI: 'assets/sprite_4.png'
+                image: 'https://dummyimage.com/400x600/4c1d95/fff.png&text=Sprite+4', // GANTI LINK IMGUR SPRITE 4
                 text: "Dan lucunya, makin ke sini kita malah makin canggung. Suka ghosting-ghostingan ga jelas.",
                 next: "n5"
             },
             "n5": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: getPlaceholder(5, '#4c1d95'), // GANTI INI: 'assets/sprite_5.png'
+                image: 'https://dummyimage.com/400x600/4c1d95/fff.png&text=Sprite+5', // GANTI LINK IMGUR SPRITE 5
                 text: "Jujur-jujuran aja nih, menurut lu sekarang kita se-awkward apa sih?",
                 choices: [
                     { text: "Kaku parah kayak kanebo kering 🥶", next: "n5A" },
@@ -364,27 +369,27 @@
             },
             "n5A": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: getPlaceholder(6, '#4c1d95'), // GANTI INI: 'assets/sprite_6.png'
+                image: 'https://dummyimage.com/400x600/4c1d95/fff.png&text=Sprite+6', // GANTI LINK IMGUR SPRITE 6
                 text: "WKWK bener banget! Chat aja sebulan sekali itupun balesannya 'Oh', 'Y', 'Ok'.",
                 anim: "anim-shake",
                 next: "n6"
             },
             "n5B": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: getPlaceholder(7, '#4c1d95'), // GANTI INI: 'assets/sprite_7.png'
+                image: 'https://dummyimage.com/400x600/4c1d95/fff.png&text=Sprite+7', // GANTI LINK IMGUR SPRITE 7
                 text: "Valid! Tiap mau nge-chat mikirin topiknya lama bener, takut salah ngomong.",
                 anim: "anim-shake",
                 next: "n6"
             },
             "n6": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: getPlaceholder(8, '#4c1d95'), // GANTI INI: 'assets/sprite_8.png'
+                image: 'https://dummyimage.com/400x600/4c1d95/fff.png&text=Sprite+8', // GANTI LINK IMGUR SPRITE 8
                 text: "Tapi, di balik semua chat kering dan kecanggungan kita...",
                 next: "n7"
             },
             "n7": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(9, '#9a3412'), // GANTI INI: 'assets/sprite_9.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+9', // GANTI LINK IMGUR SPRITE 9
                 text: "Ada satu memori absurd yang paling nempel di otak gw sampai sekarang.",
                 anim: "anim-pop",
                 next: "n8",
@@ -392,7 +397,7 @@
             },
             "n8": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(10, '#9a3412'), // GANTI INI: 'assets/sprite_10.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+10', // GANTI LINK IMGUR SPRITE 10
                 text: "Coba tebak, memori absurd apa yang gw maksud?",
                 choices: [
                     { text: "Kita deep talk semalaman via telpon? 🌙", next: "n8A" },
@@ -401,14 +406,14 @@
             },
             "n8A": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(11, '#9a3412'), // GANTI INI: 'assets/sprite_11.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+11', // GANTI LINK IMGUR SPRITE 11
                 text: "Halu lu ah. Kapan kita deep talk? Yang ada saling diam overthinking wkwk.",
                 anim: "anim-shake",
                 next: "n8_retry"
             },
             "n8_retry": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(12, '#9a3412'), // GANTI INI: 'assets/sprite_12.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+12', // GANTI LINK IMGUR SPRITE 12
                 text: "Coba tebak yang bener dong.",
                 choices: [
                     { text: "Ketemu di Jogja ga nyampe sejam? 🚂", next: "n8B" }
@@ -416,27 +421,27 @@
             },
             "n8B": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(13, '#9a3412'), // GANTI INI: 'assets/sprite_13.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+13', // GANTI LINK IMGUR SPRITE 13
                 text: "NAH INI! Valid banget wkwk. 😂",
                 anim: "anim-shake",
                 next: "n9"
             },
             "n9": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(14, '#9a3412'), // GANTI INI: 'assets/sprite_14.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+14', // GANTI LINK IMGUR SPRITE 14
                 text: "Waktu itu gw beneran nekat banget ke Jogja cuma buat nyamperin lu bentar.",
                 next: "n10"
             },
             "n10": {
                 speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: getPlaceholder(15, '#9a3412'), // GANTI INI: 'assets/sprite_15.png'
+                image: 'https://dummyimage.com/400x600/9a3412/fff.png&text=Sprite+15', // GANTI LINK IMGUR SPRITE 15
                 text: "Walaupun pertemuannya ga nyampe sejam... Sejam itu literally momen paling berharga buat gw.",
                 anim: "anim-pop",
                 next: "n11"
             },
             "n11": {
                 speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-eid", 
-                image: getPlaceholder(16, '#022c22'), // GANTI INI: 'assets/sprite_16.png'
+                image: 'https://dummyimage.com/400x600/022c22/fff.png&text=Sprite+16', // GANTI LINK IMGUR SPRITE 16
                 text: "Mendeteksi perubahan emosi... Mengubah environment ke mode: Lebaran 1445 H...",
                 next: "n12",
                 action: () => {
@@ -448,20 +453,20 @@
             },
             "n12": {
                 speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
-                image: getPlaceholder(17, '#022c22'), // GANTI INI: 'assets/sprite_17.png'
+                image: 'https://dummyimage.com/400x600/022c22/fff.png&text=Sprite+17', // GANTI LINK IMGUR SPRITE 17
                 text: "Minal aidin wal faizin ya, Zul. Mohon maaf lahir dan batin atas segala salah dan khilaf. 🙏",
                 anim: "anim-pop",
                 next: "n13"
             },
             "n13": {
                 speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
-                image: getPlaceholder(18, '#022c22'), // GANTI INI: 'assets/sprite_18.png'
+                image: 'https://dummyimage.com/400x600/022c22/fff.png&text=Sprite+18', // GANTI LINK IMGUR SPRITE 18
                 text: "Semoga lu sehat terus, makin sukses, dan ke depannya kita ga se-awkward ini lagi ya wkwk.",
                 next: "n14"
             },
             "n14": {
                 speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
-                image: getPlaceholder(18, '#022c22'), // Bisa pakai sprite yang sama
+                image: 'https://dummyimage.com/400x600/022c22/fff.png&text=Sprite+18', // GANTI LINK IMGUR SPRITE 18
                 text: "Taqabbalallahu minna wa minkum. Dari cowok yang ke Jogja cuma numpang napas, Adisa Nawfal. ✨",
                 anim: "anim-pop",
                 next: "end"
@@ -487,7 +492,7 @@
         const charSprite = document.getElementById('char-sprite');
         const typeCursor = document.getElementById('type-cursor');
 
-        // Preload Images
+        // Preload Images so they don't flicker during gameplay
         function preloadImages() {
             Object.values(story).forEach(node => {
                 if(node.image) {
@@ -507,7 +512,8 @@
 
         function setBackground(bgClass) {
             bgLayer.className = `absolute inset-0 bg-active ${bgClass}`;
-            bgLayer.innerHTML = `<div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>`;
+            // Optional: Adds a dark overlay to make background images less distracting
+            bgLayer.innerHTML = `<div class="absolute inset-0 opacity-40 bg-black"></div><div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>`;
         }
 
         function setSprite(imageSrc, animClass) {
