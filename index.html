@@ -100,14 +100,24 @@
             align-items: flex-end; /* Pin sprite to bottom */
             pointer-events: none;
             z-index: 10;
+            padding-bottom: 16vh; /* Angkat sprite agar tidak ketutup dialog di HP */
         }
 
         #char-sprite {
-            max-height: 85%; /* Sprite takes up most of the screen vertically */
-            max-width: 90%;
+            height: 55vh; /* Tinggi responsif untuk HP */
+            max-width: 95%;
             object-fit: contain;
             transform-origin: bottom center;
             transition: opacity 0.3s ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            #sprite-layer {
+                padding-bottom: 10vh; /* Sesuaikan untuk layar PC */
+            }
+            #char-sprite {
+                height: 75vh; /* Tinggi untuk PC */
+            }
         }
 
         /* Idle Breathing Animation for Sprite */
@@ -137,38 +147,69 @@
         /* --- VN DIALOGUE UI --- */
         #dialogue-container {
             position: absolute;
-            bottom: 2%;
-            left: 5%;
-            right: 5%;
+            bottom: 4%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1000px;
             z-index: 30;
             transition: transform 0.1s;
         }
+
+        @media (min-width: 768px) {
+            #dialogue-container {
+                bottom: 5%;
+                width: 85%;
+            }
+        }
+
         .dialogue-box {
             background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 24px;
-            padding-top: 32px;
-            min-height: 140px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 24px 16px 16px 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             position: relative;
             cursor: pointer;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
+
+        @media (min-width: 768px) {
+            .dialogue-box {
+                padding: 32px 40px 24px 40px;
+                border-radius: 16px;
+                min-height: 140px;
+            }
+        }
+
         .name-badge {
             position: absolute;
-            top: -20px;
-            left: 20px;
+            top: -14px;
+            left: 16px;
             background: linear-gradient(90deg, #10b981, #059669); /* Emerald */
-            padding: 6px 24px;
-            border-radius: 4px;
+            padding: 4px 16px;
+            border-radius: 6px;
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             border: 1px solid rgba(255,255,255,0.3);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 768px) {
+            .name-badge {
+                top: -18px;
+                left: 32px;
+                padding: 6px 24px;
+                font-size: 1.1rem;
+            }
         }
 
         /* Box bump feedback */
@@ -185,11 +226,22 @@
             backdrop-filter: blur(4px);
         }
         .choice-btn {
-            background: linear-gradient(90deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9));
+            background: linear-gradient(90deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95));
             border: 1px solid rgba(255,255,255,0.2);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             transform-origin: center;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border-radius: 12px;
         }
+
+        @media (min-width: 768px) {
+            .choice-btn {
+                padding: 18px 24px;
+                font-size: 1.125rem;
+            }
+        }
+
         .choice-btn:hover {
             background: linear-gradient(90deg, rgba(16,185,129,0.8), rgba(5,150,105,0.8));
             transform: scale(1.03) translateX(10px);
@@ -223,19 +275,19 @@
         </div>
 
         <!-- Vignette/Shadow to make dialogue text readable -->
-        <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none z-20"></div>
+        <div class="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-none z-20"></div>
         
         <!-- 3. Classic VN Dialogue Box -->
         <div id="dialogue-container">
             <div class="dialogue-box" id="dialogue-box">
                 <div id="speaker-name" class="name-badge">Sistem</div>
-                <div class="text-lg md:text-xl leading-relaxed text-gray-100 font-medium">
+                <div class="text-[15px] md:text-xl lg:text-2xl leading-relaxed text-gray-100 font-medium min-h-[3rem] md:min-h-[4rem]">
                     <span id="dialogue-text"></span><span class="cursor" id="type-cursor"></span>
                 </div>
                 <!-- Game UI Decor -->
-                <div class="absolute bottom-3 right-4 flex items-center gap-2">
-                    <span class="text-[10px] uppercase text-gray-400 font-bold tracking-widest">Auto/Skip</span>
-                    <i id="continue-indicator" data-lucide="chevron-down" class="w-5 h-5 text-emerald-400 animate-bounce hidden"></i>
+                <div class="absolute bottom-2 right-3 md:bottom-4 md:right-5 flex items-center gap-1 md:gap-2">
+                    <span class="text-[9px] md:text-[11px] uppercase text-gray-400 font-bold tracking-widest">Auto/Skip</span>
+                    <i id="continue-indicator" data-lucide="chevron-down" class="w-4 h-4 md:w-5 md:h-5 text-emerald-400 animate-bounce hidden"></i>
                 </div>
             </div>
         </div>
@@ -243,21 +295,21 @@
         <!-- 4. Choices UI -->
         <div id="choices-ui" class="absolute inset-0 z-50 hidden flex-col items-center justify-center p-6 gap-4">
             <h3 class="text-white font-bold mb-6 text-xl md:text-2xl text-center" id="choice-question">...</h3>
-            <div id="choices-container" class="w-full max-w-lg flex flex-col gap-3">
+            <div id="choices-container" class="w-full max-w-2xl flex flex-col gap-3 md:gap-4 overflow-y-auto max-h-[75vh] p-2">
                 <!-- Buttons injected via JS -->
             </div>
         </div>
         
         <!-- 5. Start Screen -->
         <div id="start-screen" class="absolute inset-0 bg-slate-900 z-[100] flex flex-col items-center justify-center p-6 text-center">
-            <i data-lucide="gamepad-2" class="w-20 h-20 text-emerald-400 mb-6 animate-pulse"></i>
-            <h1 class="font-serif text-4xl md:text-5xl font-bold text-white mb-2 tracking-wide">Memori LDR</h1>
-            <p class="text-gray-400 mb-10 text-lg uppercase tracking-widest">Adisa x Zulian</p>
+            <i data-lucide="gamepad-2" class="w-16 h-16 md:w-20 md:h-20 text-emerald-400 mb-6 animate-pulse"></i>
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-white mb-2 tracking-wide">Memori LDR</h1>
+            <p class="text-gray-400 mb-10 text-base md:text-lg uppercase tracking-widest">Adisa x Zulian</p>
             
-            <button onclick="startGame()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-12 rounded-lg text-lg transition-transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center gap-3">
+            <button onclick="startGame()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-xl text-base md:text-lg transition-transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.4)] flex items-center gap-2 md:gap-3">
                 <i data-lucide="play" class="w-5 h-5 fill-current"></i> MULAI CERITA
             </button>
-            <p class="text-sm text-gray-500 mt-8">Gunakan Headset/Speaker 🔊</p>
+            <p class="text-xs md:text-sm text-gray-500 mt-8">Gunakan Headset/Speaker 🔊</p>
         </div>
     </div>
 
@@ -327,9 +379,6 @@
         }
 
         /* --- 2. STORY DATA & CHARACTER SPRITES (GANTI LINK IMGUR DI SINI) --- */
-        // Untuk mencoba, saya beri placeholder gambar yang transparan.
-        // Ganti URL yang ada di 'image: ...' dengan link Imgur kamu!
-        
         const story = {
             "start": {
                 speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-system", 
