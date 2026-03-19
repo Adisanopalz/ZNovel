@@ -1,712 +1,712 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visual Novel: Memori LDR</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #050505; 
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            color: white;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Novel: Memori LDR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #050505; 
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: white;
+        }
 
-        .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
 
-        /* Game Container: Widescreen ratio for desktop, full for mobile */
-        #game-container {
-            width: 100%;
-            height: 100%;
-            max-width: 1280px; 
-            position: relative;
-            background-color: #000;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-        }
+        /* Game Container: Widescreen ratio for desktop, full for mobile */
+        #game-container {
+            width: 100%;
+            height: 100%;
+            max-width: 1280px; 
+            position: relative;
+            background-color: #000;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
 
-        @media (min-width: 768px) {
-            #game-container {
-                height: 85vh;
-                border-radius: 12px;
-                border: 2px solid #333;
-            }
-        }
+        @media (min-width: 768px) {
+            #game-container {
+                height: 85vh;
+                border-radius: 12px;
+                border: 2px solid #333;
+            }
+        }
 
-        /* --- 1. BACKGROUND THEMES (GANTI LINK IMGUR DI SINI) --- */
-        .bg-system { 
-            /* Background Sistem / Awal */
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 1 */
-            background-size: cover; background-position: center;
-        }
-        .bg-awkward { 
-            /* Background Awkward / Canggung */
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 2 */
-            background-size: cover; background-position: center;
-        }
-        .bg-jogja { 
-            /* Background Memori Jogja */
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 3 */
-            background-size: cover; background-position: center;
-        }
-        .bg-eid { 
-            /* Background Lebaran */
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 4 */
-            background-size: cover; background-position: center;
-        }
-        
-        /* Slow Pan/Zoom for Background to make it feel alive */
-        @keyframes bgZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.15); }
-        }
-        .bg-active {
-            animation: bgZoom 20s linear infinite alternate;
-        }
+        /* --- 1. BACKGROUND THEMES (GANTI LINK IMGUR DI SINI) --- */
+        .bg-system { 
+            /* Background Sistem / Awal */
+            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 1 */
+            background-size: cover; background-position: center;
+        }
+        .bg-awkward { 
+            /* Background Awkward / Canggung */
+            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 2 */
+            background-size: cover; background-position: center;
+        }
+        .bg-jogja { 
+            /* Background Memori Jogja */
+            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 3 */
+            background-size: cover; background-position: center;
+        }
+        .bg-eid { 
+            /* Background Lebaran */
+            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); /* GANTI LINK IMGUR BG 4 */
+            background-size: cover; background-position: center;
+        }
+        
+        /* Slow Pan/Zoom for Background to make it feel alive */
+        @keyframes bgZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+        .bg-active {
+            animation: bgZoom 20s linear infinite alternate;
+        }
 
-        /* Typewriter Cursor */
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 18px;
-            background-color: white;
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-            margin-left: 4px;
-        }
+        /* Typewriter Cursor */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background-color: white;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* --- CHARACTER SPRITE --- */
-        #sprite-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* Pin sprite to bottom */
-            pointer-events: none;
-            z-index: 10;
-        }
+        /* --- CHARACTER SPRITE --- */
+        #sprite-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Pin sprite to bottom */
+            pointer-events: none;
+            z-index: 10;
+        }
 
-        #char-sprite {
-            max-height: 85%; /* Sprite takes up most of the screen vertically */
-            max-width: 90%;
-            object-fit: contain;
-            transform-origin: bottom center;
-            transition: opacity 0.3s ease-in-out;
-        }
+        #char-sprite {
+            max-height: 85%; /* Sprite takes up most of the screen vertically */
+            max-width: 90%;
+            object-fit: contain;
+            transform-origin: bottom center;
+            transition: opacity 0.3s ease-in-out;
+        }
 
-        /* Idle Breathing Animation for Sprite */
-        @keyframes breathe {
-            0%, 100% { transform: scaleY(1) scaleX(1); }
-            50% { transform: scaleY(1.02) scaleX(0.99); }
-        }
-        .anim-breathe { animation: breathe 3s ease-in-out infinite; }
+        /* Idle Breathing Animation for Sprite */
+        @keyframes breathe {
+            0%, 100% { transform: scaleY(1) scaleX(1); }
+            50% { transform: scaleY(1.02) scaleX(0.99); }
+        }
+        .anim-breathe { animation: breathe 3s ease-in-out infinite; }
 
-        /* Game Feel Animations */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-15px) rotate(-2deg); }
-            40% { transform: translateX(15px) rotate(2deg); }
-            60% { transform: translateX(-15px) rotate(-2deg); }
-            80% { transform: translateX(15px) rotate(2deg); }
-        }
-        .anim-shake { animation: shake 0.4s ease-in-out; }
+        /* Game Feel Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-15px) rotate(-2deg); }
+            40% { transform: translateX(15px) rotate(2deg); }
+            60% { transform: translateX(-15px) rotate(-2deg); }
+            80% { transform: translateX(15px) rotate(2deg); }
+        }
+        .anim-shake { animation: shake 0.4s ease-in-out; }
 
-        @keyframes pop {
-            0% { transform: scale(0.95) translateY(10px); }
-            50% { transform: scale(1.02) translateY(-5px); }
-            100% { transform: scale(1) translateY(0); }
-        }
-        .anim-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop {
+            0% { transform: scale(0.95) translateY(10px); }
+            50% { transform: scale(1.02) translateY(-5px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+        .anim-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* --- VN DIALOGUE UI --- */
-        #dialogue-container {
-            position: absolute;
-            bottom: 2%;
-            left: 5%;
-            right: 5%;
-            z-index: 30;
-            transition: transform 0.1s;
-        }
-        .dialogue-box {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 24px;
-            padding-top: 32px;
-            min-height: 140px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-            cursor: pointer;
-        }
-        .name-badge {
-            position: absolute;
-            top: -20px;
-            left: 20px;
-            background: linear-gradient(90deg, #10b981, #059669); /* Emerald */
-            padding: 6px 24px;
-            border-radius: 4px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.3);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
+        /* --- VN DIALOGUE UI --- */
+        #dialogue-container {
+            position: absolute;
+            bottom: 2%;
+            left: 5%;
+            right: 5%;
+            z-index: 30;
+            transition: transform 0.1s;
+        }
+        .dialogue-box {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 24px;
+            padding-top: 32px;
+            min-height: 140px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            cursor: pointer;
+        }
+        .name-badge {
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background: linear-gradient(90deg, #10b981, #059669); /* Emerald */
+            padding: 6px 24px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
 
-        /* Box bump feedback */
-        @keyframes box-bump {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-            100% { transform: scale(1); }
-        }
-        .anim-bump { animation: box-bump 0.2s ease-out; }
+        /* Box bump feedback */
+        @keyframes box-bump {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+        .anim-bump { animation: box-bump 0.2s ease-out; }
 
-        /* --- CHOICES UI --- */
-        #choices-ui {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-        }
-        .choice-btn {
-            background: linear-gradient(90deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9));
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: center;
-        }
-        .choice-btn:hover {
-            background: linear-gradient(90deg, rgba(16,185,129,0.8), rgba(5,150,105,0.8));
-            transform: scale(1.03) translateX(10px);
-            border-color: rgba(255,255,255,0.6);
-            box-shadow: 0 0 20px rgba(16,185,129,0.4);
-        }
-        @keyframes slide-in-right {
-            0% { transform: translateX(50px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
+        /* --- CHOICES UI --- */
+        #choices-ui {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        .choice-btn {
+            background: linear-gradient(90deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9));
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        .choice-btn:hover {
+            background: linear-gradient(90deg, rgba(16,185,129,0.8), rgba(5,150,105,0.8));
+            transform: scale(1.03) translateX(10px);
+            border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 0 20px rgba(16,185,129,0.4);
+        }
+        @keyframes slide-in-right {
+            0% { transform: translateX(50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
 
-        /* Misc */
-        .text-glow { text-shadow: 0 0 15px currentColor; }
-    </style>
+        /* Misc */
+        .text-glow { text-shadow: 0 0 15px currentColor; }
+    </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <!-- 1. Background Layer -->
-        <div id="bg-layer" class="absolute inset-0 bg-system bg-active">
-            <!-- Grid overlay for visual texture -->
-            <div class="absolute inset-0 opacity-20 bg-black/40" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>
-        </div>
+    <div id="game-container">
+        <!-- 1. Background Layer -->
+        <div id="bg-layer" class="absolute inset-0 bg-system bg-active">
+            <!-- Grid overlay for visual texture -->
+            <div class="absolute inset-0 opacity-20 bg-black/40" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>
+        </div>
 
-        <canvas id="confetti-canvas" class="hidden absolute inset-0 z-40 pointer-events-none"></canvas>
+        <canvas id="confetti-canvas" class="hidden absolute inset-0 z-40 pointer-events-none"></canvas>
 
-        <!-- 2. Sprite Layer (Uses actual <img> now) -->
-        <div id="sprite-layer">
-            <!-- Initial blank SVG placeholder -->
-            <img id="char-sprite" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E" alt="Karakter Adisa" class="anim-breathe opacity-0">
-        </div>
+        <!-- 2. Sprite Layer (Uses actual <img> now) -->
+        <div id="sprite-layer">
+            <!-- Initial blank SVG placeholder -->
+            <img id="char-sprite" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E" alt="Karakter Adisa" class="anim-breathe opacity-0">
+        </div>
 
-        <!-- Vignette/Shadow to make dialogue text readable -->
-        <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none z-20"></div>
-        
-        <!-- 3. Classic VN Dialogue Box -->
-        <div id="dialogue-container">
-            <div class="dialogue-box" id="dialogue-box">
-                <div id="speaker-name" class="name-badge">Sistem</div>
-                <div class="text-lg md:text-xl leading-relaxed text-gray-100 font-medium">
-                    <span id="dialogue-text"></span><span class="cursor" id="type-cursor"></span>
-                </div>
-                <!-- Game UI Decor -->
-                <div class="absolute bottom-3 right-4 flex items-center gap-2">
-                    <span class="text-[10px] uppercase text-gray-400 font-bold tracking-widest">Auto/Skip</span>
-                    <i id="continue-indicator" data-lucide="chevron-down" class="w-5 h-5 text-emerald-400 animate-bounce hidden"></i>
-                </div>
-            </div>
-        </div>
+        <!-- Vignette/Shadow to make dialogue text readable -->
+        <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none z-20"></div>
+        
+        <!-- 3. Classic VN Dialogue Box -->
+        <div id="dialogue-container">
+            <div class="dialogue-box" id="dialogue-box">
+                <div id="speaker-name" class="name-badge">Sistem</div>
+                <div class="text-lg md:text-xl leading-relaxed text-gray-100 font-medium">
+                    <span id="dialogue-text"></span><span class="cursor" id="type-cursor"></span>
+                </div>
+                <!-- Game UI Decor -->
+                <div class="absolute bottom-3 right-4 flex items-center gap-2">
+                    <span class="text-[10px] uppercase text-gray-400 font-bold tracking-widest">Auto/Skip</span>
+                    <i id="continue-indicator" data-lucide="chevron-down" class="w-5 h-5 text-emerald-400 animate-bounce hidden"></i>
+                </div>
+            </div>
+        </div>
 
-        <!-- 4. Choices UI -->
-        <div id="choices-ui" class="absolute inset-0 z-50 hidden flex-col items-center justify-center p-6 gap-4">
-            <h3 class="text-white font-bold mb-6 text-xl md:text-2xl text-center" id="choice-question">...</h3>
-            <div id="choices-container" class="w-full max-w-lg flex flex-col gap-3">
-                <!-- Buttons injected via JS -->
-            </div>
-        </div>
-        
-        <!-- 5. Start Screen -->
-        <div id="start-screen" class="absolute inset-0 bg-slate-900 z-[100] flex flex-col items-center justify-center p-6 text-center">
-            <i data-lucide="gamepad-2" class="w-20 h-20 text-emerald-400 mb-6 animate-pulse"></i>
-            <h1 class="font-serif text-4xl md:text-5xl font-bold text-white mb-2 tracking-wide">Memori LDR</h1>
-            <p class="text-gray-400 mb-10 text-lg uppercase tracking-widest">Adisa x Zulian</p>
-            
-            <button onclick="startGame()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-12 rounded-lg text-lg transition-transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center gap-3">
-                <i data-lucide="play" class="w-5 h-5 fill-current"></i> MULAI CERITA
-            </button>
-            <p class="text-sm text-gray-500 mt-8">Gunakan Headset/Speaker 🔊</p>
-        </div>
-    </div>
+        <!-- 4. Choices UI -->
+        <div id="choices-ui" class="absolute inset-0 z-50 hidden flex-col items-center justify-center p-6 gap-4">
+            <h3 class="text-white font-bold mb-6 text-xl md:text-2xl text-center" id="choice-question">...</h3>
+            <div id="choices-container" class="w-full max-w-lg flex flex-col gap-3">
+                <!-- Buttons injected via JS -->
+            </div>
+        </div>
+        
+        <!-- 5. Start Screen -->
+        <div id="start-screen" class="absolute inset-0 bg-slate-900 z-[100] flex flex-col items-center justify-center p-6 text-center">
+            <i data-lucide="gamepad-2" class="w-20 h-20 text-emerald-400 mb-6 animate-pulse"></i>
+            <h1 class="font-serif text-4xl md:text-5xl font-bold text-white mb-2 tracking-wide">Memori LDR</h1>
+            <p class="text-gray-400 mb-10 text-lg uppercase tracking-widest">Adisa x Zulian</p>
+            
+            <button onclick="startGame()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-12 rounded-lg text-lg transition-transform hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center gap-3">
+                <i data-lucide="play" class="w-5 h-5 fill-current"></i> MULAI CERITA
+            </button>
+            <p class="text-sm text-gray-500 mt-8">Gunakan Headset/Speaker 🔊</p>
+        </div>
+    </div>
 
-    <script>
-        lucide.createIcons();
+    <script>
+        lucide.createIcons();
 
-        // --- AUDIO ENGINE ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
+        // --- AUDIO ENGINE ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
 
-        function initAudio() {
-            if (!audioCtx) audioCtx = new AudioContext();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
 
-        function playTypeSound() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(800 + Math.random() * 200, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.02);
-        }
+        function playTypeSound() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800 + Math.random() * 200, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.02);
+        }
 
-        function playClickSound() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-        }
+        function playClickSound() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
 
-        function playChoiceSound() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
-            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-        }
+        function playChoiceSound() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
 
-        function playMagicSound() {
-            if (!audioCtx) return;
-            const chords = [523.25, 659.25, 783.99, 1046.50];
-            chords.forEach((freq, i) => {
-                setTimeout(() => {
-                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.type = 'sine'; osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-                }, i * 100);
-            });
-        }
+        function playMagicSound() {
+            if (!audioCtx) return;
+            const chords = [523.25, 659.25, 783.99, 1046.50];
+            chords.forEach((freq, i) => {
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'sine'; osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+                }, i * 100);
+            });
+        }
 
-        /* --- 2. STORY DATA & CHARACTER SPRITES (GANTI LINK IMGUR DI SINI) --- */
-        // Untuk mencoba, saya beri placeholder gambar yang transparan.
-        // Ganti URL yang ada di 'image: ...' dengan link Imgur kamu!
-        
-        const story = {
-            "start": {
-                speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-system", 
-                image: 'https://assets-v2.lottiefiles.com/a/4e784ad0-f128-11ee-bbb7-b76f60dbd4ce/shoJtcsKZ0.gif', // GANTI LINK IMGUR SPRITE 1
-                text: "Memuat memori dari: Adisa Nawfal... Target sinkronisasi: Zulian.",
-                next: "n2"
-            },
-            "n2": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-system", 
-                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 2
-                text: "Zulian Fatimatuzzahro Hurul Aini... Namamu masih aja kepanjangan buat diucapin dalam satu napas.",
-                anim: "anim-pop",
-                next: "n3"
-            },
-            "n3": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 3
-                text: "Ga kerasa ya udah hampir 4 tahun kita LDR-an.",
-                anim: "anim-pop",
-                next: "n4",
-                action: () => setBackground('bg-awkward')
-            },
-            "n4": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: 'https://i.imgur.com/IGF8TGr.png', // GANTI LINK IMGUR SPRITE 4
-                text: "Dan lucunya, makin ke sini kita malah makin canggung. Suka ghosting-ghostingan ga jelas.",
-                next: "n5"
-            },
-            "n5": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 5
-                text: "Jujur-jujuran aja nih, menurut lu sekarang kita se-awkward apa sih?",
-                choices: [
-                    { text: "Kaku parah kayak kanebo kering 🥶", next: "n5A" },
-                    { text: "Kayak HRD sama Pelamar Kerja 🤝", next: "n5B" }
-                ]
-            },
-            "n5A": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 6
-                text: "WKWK bener banget! Chat aja sebulan sekali itupun balesannya 'Oh', 'Y', 'Ok'.",
-                anim: "anim-shake",
-                next: "n6"
-            },
-            "n5B": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: 'https://i.imgur.com/3e7GvjQ.png', // GANTI LINK IMGUR SPRITE 7
-                text: "Valid! Tiap mau nge-chat mikirin topiknya lama bener, takut salah ngomong.",
-                anim: "anim-shake",
-                next: "n6"
-            },
-            "n6": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
-                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 8
-                text: "Tapi, di balik semua chat kering dan kecanggungan kita...",
-                next: "n7"
-            },
-            "n7": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 9
-                text: "Ada satu memori absurd yang paling nempel di otak gw sampai sekarang.",
-                anim: "anim-pop",
-                next: "n8",
-                action: () => setBackground('bg-jogja')
-            },
-            "n8": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 10
-                text: "Coba tebak, memori absurd apa yang gw maksud?",
-                choices: [
-                    { text: "Kita deep talk semalaman via telpon? 🌙", next: "n8A" },
-                    { text: "Nekat ketemu di Jogja < 1 jam? 🚂", next: "n8B" }
-                ]
-            },
-            "n8A": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/3e7GvjQ.png', // GANTI LINK IMGUR SPRITE 11
-                text: "Halu lu ah. Kapan kita deep talk? Yang ada saling diam overthinking wkwk.",
-                anim: "anim-shake",
-                next: "n8_retry"
-            },
-            "n8_retry": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/IGF8TGr.png', // GANTI LINK IMGUR SPRITE 12
-                text: "Coba tebak yang bener dong.",
-                choices: [
-                    { text: "Ketemu di Jogja ga nyampe sejam? 🚂", next: "n8B" }
-                ]
-            },
-            "n8B": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 13
-                text: "NAH INI! Valid banget wkwk. 😂",
-                anim: "anim-shake",
-                next: "n9"
-            },
-            "n9": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 14
-                text: "Waktu itu gw beneran nekat banget ke Jogja cuma buat nyamperin lu bentar.",
-                next: "n10"
-            },
-            "n10": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
-                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 15
-                text: "Walaupun pertemuannya ga nyampe sejam... Sejam itu literally momen paling berharga buat gw.",
-                anim: "anim-pop",
-                next: "n11"
-            },
-            "n11": {
-                speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-eid", 
-                image: 'https://assets-v2.lottiefiles.com/a/4e784ad0-f128-11ee-bbb7-b76f60dbd4ce/shoJtcsKZ0.gif', // GANTI LINK IMGUR SPRITE 16
-                text: "Mendeteksi perubahan emosi... Mengubah environment ke mode: Lebaran 1445 H...",
-                next: "n12",
-                action: () => {
-                    setBackground('bg-eid');
-                    playMagicSound();
-                    document.getElementById('confetti-canvas').classList.remove('hidden');
-                    startConfetti();
-                }
-            },
-            "n12": {
-                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
-                image: 'https://i.imgur.com/m1HbQid.png', // GANTI LINK IMGUR SPRITE 17
-                text: "Minal aidin wal faizin ya, Zul. Mohon maaf lahir dan batin atas segala salah dan khilaf. 🙏",
-                anim: "anim-pop",
-                next: "n13"
-            },
-            "n13": {
-                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
-                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 18
-                text: "Semoga lu sehat terus, makin sukses, dan ke depannya kita ga se-awkward ini lagi ya wkwk.",
-                next: "n14"
-            },
-            "n14": {
-                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
-                image: 'https://i.imgur.com/ewkY0Ft.png', // GANTI LINK IMGUR SPRITE 18
-                text: "Taqabbalallahu minna wa minkum. Dari cowok yang ke Jogja cuma numpang napas, Adisa Nawfal. ✨",
-                anim: "anim-pop",
-                next: "end"
-            }
-        };
+        /* --- 2. STORY DATA & CHARACTER SPRITES (GANTI LINK IMGUR DI SINI) --- */
+        // Untuk mencoba, saya beri placeholder gambar yang transparan.
+        // Ganti URL yang ada di 'image: ...' dengan link Imgur kamu!
+        
+        const story = {
+            "start": {
+                speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-system", 
+                image: 'https://assets-v2.lottiefiles.com/a/4e784ad0-f128-11ee-bbb7-b76f60dbd4ce/shoJtcsKZ0.gif', // GANTI LINK IMGUR SPRITE 1
+                text: "Memuat memori dari: Adisa Nawfal... Target sinkronisasi: Zulian.",
+                next: "n2"
+            },
+            "n2": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-system", 
+                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 2
+                text: "Zulian Fatimatuzzahro Hurul Aini... Namamu masih aja kepanjangan buat diucapin dalam satu napas.",
+                anim: "anim-pop",
+                next: "n3"
+            },
+            "n3": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 3
+                text: "Ga kerasa ya udah hampir 4 tahun kita LDR-an.",
+                anim: "anim-pop",
+                next: "n4",
+                action: () => setBackground('bg-awkward')
+            },
+            "n4": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                image: 'https://i.imgur.com/IGF8TGr.png', // GANTI LINK IMGUR SPRITE 4
+                text: "Dan lucunya, makin ke sini kita malah makin canggung. Suka ghosting-ghostingan ga jelas.",
+                next: "n5"
+            },
+            "n5": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 5
+                text: "Jujur-jujuran aja nih, menurut lu sekarang kita se-awkward apa sih?",
+                choices: [
+                    { text: "Kaku parah kayak kanebo kering 🥶", next: "n5A" },
+                    { text: "Kayak HRD sama Pelamar Kerja 🤝", next: "n5B" }
+                ]
+            },
+            "n5A": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 6
+                text: "WKWK bener banget! Chat aja sebulan sekali itupun balesannya 'Oh', 'Y', 'Ok'.",
+                anim: "anim-shake",
+                next: "n6"
+            },
+            "n5B": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                image: 'https://i.imgur.com/3e7GvjQ.png', // GANTI LINK IMGUR SPRITE 7
+                text: "Valid! Tiap mau nge-chat mikirin topiknya lama bener, takut salah ngomong.",
+                anim: "anim-shake",
+                next: "n6"
+            },
+            "n6": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 8
+                text: "Tapi, di balik semua chat kering dan kecanggungan kita...",
+                next: "n7"
+            },
+            "n7": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 9
+                text: "Ada satu memori absurd yang paling nempel di otak gw sampai sekarang.",
+                anim: "anim-pop",
+                next: "n8",
+                action: () => setBackground('bg-jogja')
+            },
+            "n8": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 10
+                text: "Coba tebak, memori absurd apa yang gw maksud?",
+                choices: [
+                    { text: "Kita deep talk semalaman via telpon? 🌙", next: "n8A" },
+                    { text: "Nekat ketemu di Jogja < 1 jam? 🚂", next: "n8B" }
+                ]
+            },
+            "n8A": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/3e7GvjQ.png', // GANTI LINK IMGUR SPRITE 11
+                text: "Halu lu ah. Kapan kita deep talk? Yang ada saling diam overthinking wkwk.",
+                anim: "anim-shake",
+                next: "n8_retry"
+            },
+            "n8_retry": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/IGF8TGr.png', // GANTI LINK IMGUR SPRITE 12
+                text: "Coba tebak yang bener dong.",
+                choices: [
+                    { text: "Ketemu di Jogja ga nyampe sejam? 🚂", next: "n8B" }
+                ]
+            },
+            "n8B": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 13
+                text: "NAH INI! Valid banget wkwk. 😂",
+                anim: "anim-shake",
+                next: "n9"
+            },
+            "n9": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 14
+                text: "Waktu itu gw beneran nekat banget ke Jogja cuma buat nyamperin lu bentar.",
+                next: "n10"
+            },
+            "n10": {
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                image: 'https://i.imgur.com/hWnAJkF.png', // GANTI LINK IMGUR SPRITE 15
+                text: "Walaupun pertemuannya ga nyampe sejam... Sejam itu literally momen paling berharga buat gw.",
+                anim: "anim-pop",
+                next: "n11"
+            },
+            "n11": {
+                speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-eid", 
+                image: 'https://assets-v2.lottiefiles.com/a/4e784ad0-f128-11ee-bbb7-b76f60dbd4ce/shoJtcsKZ0.gif', // GANTI LINK IMGUR SPRITE 16
+                text: "Mendeteksi perubahan emosi... Mengubah environment ke mode: Lebaran 1445 H...",
+                next: "n12",
+                action: () => {
+                    setBackground('bg-eid');
+                    playMagicSound();
+                    document.getElementById('confetti-canvas').classList.remove('hidden');
+                    startConfetti();
+                }
+            },
+            "n12": {
+                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
+                image: 'https://i.imgur.com/m1HbQid.png', // GANTI LINK IMGUR SPRITE 17
+                text: "Minal aidin wal faizin ya, Zul. Mohon maaf lahir dan batin atas segala salah dan khilaf. 🙏",
+                anim: "anim-pop",
+                next: "n13"
+            },
+            "n13": {
+                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
+                image: 'https://i.imgur.com/nJYAS6A.png', // GANTI LINK IMGUR SPRITE 18
+                text: "Semoga lu sehat terus, makin sukses, dan ke depannya kita ga se-awkward ini lagi ya wkwk.",
+                next: "n14"
+            },
+            "n14": {
+                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
+                image: 'https://i.imgur.com/ewkY0Ft.png', // GANTI LINK IMGUR SPRITE 18
+                text: "Taqabbalallahu minna wa minkum. Dari cowok yang ke Jogja cuma numpang napas, Adisa Nawfal. ✨",
+                anim: "anim-pop",
+                next: "end"
+            }
+        };
 
-        // --- ENGINE STATE ---
-        let currentNode = "start";
-        let isTyping = false;
-        let currentText = "";
-        let typeInterval;
-        let charIndex = 0;
+        // --- ENGINE STATE ---
+        let currentNode = "start";
+        let isTyping = false;
+        let currentText = "";
+        let typeInterval;
+        let charIndex = 0;
 
-        // --- DOM ELEMENTS ---
-        const dialogueContainer = document.getElementById('dialogue-container');
-        const dialogueBox = document.getElementById('dialogue-box');
-        const speakerName = document.getElementById('speaker-name');
-        const dialogueText = document.getElementById('dialogue-text');
-        const continueIndicator = document.getElementById('continue-indicator');
-        const choicesUI = document.getElementById('choices-ui');
-        const choicesContainer = document.getElementById('choices-container');
-        const bgLayer = document.getElementById('bg-layer');
-        const charSprite = document.getElementById('char-sprite');
-        const typeCursor = document.getElementById('type-cursor');
+        // --- DOM ELEMENTS ---
+        const dialogueContainer = document.getElementById('dialogue-container');
+        const dialogueBox = document.getElementById('dialogue-box');
+        const speakerName = document.getElementById('speaker-name');
+        const dialogueText = document.getElementById('dialogue-text');
+        const continueIndicator = document.getElementById('continue-indicator');
+        const choicesUI = document.getElementById('choices-ui');
+        const choicesContainer = document.getElementById('choices-container');
+        const bgLayer = document.getElementById('bg-layer');
+        const charSprite = document.getElementById('char-sprite');
+        const typeCursor = document.getElementById('type-cursor');
 
-        // Preload Images so they don't flicker during gameplay
-        function preloadImages() {
-            Object.values(story).forEach(node => {
-                if(node.image) {
-                    const img = new Image();
-                    img.src = node.image;
-                }
-            });
-        }
+        // Preload Images so they don't flicker during gameplay
+        function preloadImages() {
+            Object.values(story).forEach(node => {
+                if(node.image) {
+                    const img = new Image();
+                    img.src = node.image;
+                }
+            });
+        }
 
-        function startGame() {
-            initAudio();
-            preloadImages();
-            document.getElementById('start-screen').style.display = 'none';
-            playClickSound();
-            loadNode("start");
-        }
+        function startGame() {
+            initAudio();
+            preloadImages();
+            document.getElementById('start-screen').style.display = 'none';
+            playClickSound();
+            loadNode("start");
+        }
 
-        function setBackground(bgClass) {
-            bgLayer.className = `absolute inset-0 bg-active ${bgClass}`;
-            // Optional: Adds a dark overlay to make background images less distracting
-            bgLayer.innerHTML = `<div class="absolute inset-0 opacity-40 bg-black"></div><div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>`;
-        }
+        function setBackground(bgClass) {
+            bgLayer.className = `absolute inset-0 bg-active ${bgClass}`;
+            // Optional: Adds a dark overlay to make background images less distracting
+            bgLayer.innerHTML = `<div class="absolute inset-0 opacity-40 bg-black"></div><div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 30px 30px;"></div>`;
+        }
 
-        function setSprite(imageSrc, animClass) {
-            // Fade out
-            charSprite.style.opacity = '0';
-            charSprite.classList.remove('anim-shake', 'anim-pop');
-            
-            setTimeout(() => {
-                charSprite.src = imageSrc;
-                charSprite.style.opacity = '1';
-                
-                if (animClass) {
-                    void charSprite.offsetWidth; // trigger reflow
-                    charSprite.classList.add(animClass);
-                }
-            }, 150); // slight delay for crossfade feel
-        }
+        function setSprite(imageSrc, animClass) {
+            // Fade out
+            charSprite.style.opacity = '0';
+            charSprite.classList.remove('anim-shake', 'anim-pop');
+            
+            setTimeout(() => {
+                charSprite.src = imageSrc;
+                charSprite.style.opacity = '1';
+                
+                if (animClass) {
+                    void charSprite.offsetWidth; // trigger reflow
+                    charSprite.classList.add(animClass);
+                }
+            }, 150); // slight delay for crossfade feel
+        }
 
-        function loadNode(nodeId) {
-            if (nodeId === "end") {
-                showEndScreen();
-                return;
-            }
+        function loadNode(nodeId) {
+            if (nodeId === "end") {
+                showEndScreen();
+                return;
+            }
 
-            const node = story[nodeId];
-            currentNode = nodeId;
+            const node = story[nodeId];
+            currentNode = nodeId;
 
-            if (node.action) node.action();
+            if (node.action) node.action();
 
-            // Set UI
-            speakerName.innerText = node.speaker;
-            speakerName.className = `name-badge bg-gradient-to-r ${node.color}`;
-            
-            // Set Image Sprite
-            if(node.image) setSprite(node.image, node.anim);
-            
-            // Box bump for game feel
-            dialogueBox.classList.remove('anim-bump');
-            void dialogueBox.offsetWidth;
-            dialogueBox.classList.add('anim-bump');
-            
-            // Start Typing
-            currentText = node.text;
-            startTyping();
-        }
+            // Set UI
+            speakerName.innerText = node.speaker;
+            speakerName.className = `name-badge bg-gradient-to-r ${node.color}`;
+            
+            // Set Image Sprite
+            if(node.image) setSprite(node.image, node.anim);
+            
+            // Box bump for game feel
+            dialogueBox.classList.remove('anim-bump');
+            void dialogueBox.offsetWidth;
+            dialogueBox.classList.add('anim-bump');
+            
+            // Start Typing
+            currentText = node.text;
+            startTyping();
+        }
 
-        function startTyping() {
-            clearInterval(typeInterval);
-            dialogueText.innerText = "";
-            charIndex = 0;
-            isTyping = true;
-            continueIndicator.classList.add('hidden');
-            typeCursor.style.display = 'inline-block';
+        function startTyping() {
+            clearInterval(typeInterval);
+            dialogueText.innerText = "";
+            charIndex = 0;
+            isTyping = true;
+            continueIndicator.classList.add('hidden');
+            typeCursor.style.display = 'inline-block';
 
-            typeInterval = setInterval(() => {
-                if (charIndex < currentText.length) {
-                    dialogueText.innerText += currentText.charAt(charIndex);
-                    charIndex++;
-                    if(charIndex % 3 === 0) playTypeSound(); 
-                } else {
-                    finishTyping();
-                }
-            }, 35); // Kecepatan ngetik
-        }
+            typeInterval = setInterval(() => {
+                if (charIndex < currentText.length) {
+                    dialogueText.innerText += currentText.charAt(charIndex);
+                    charIndex++;
+                    if(charIndex % 3 === 0) playTypeSound(); 
+                } else {
+                    finishTyping();
+                }
+            }, 35); // Kecepatan ngetik
+        }
 
-        function finishTyping() {
-            clearInterval(typeInterval);
-            dialogueText.innerText = currentText;
-            isTyping = false;
-            typeCursor.style.display = 'none';
-            
-            const node = story[currentNode];
-            if (node.choices) {
-                showChoices(node.choices);
-            } else {
-                continueIndicator.classList.remove('hidden');
-            }
-        }
+        function finishTyping() {
+            clearInterval(typeInterval);
+            dialogueText.innerText = currentText;
+            isTyping = false;
+            typeCursor.style.display = 'none';
+            
+            const node = story[currentNode];
+            if (node.choices) {
+                showChoices(node.choices);
+            } else {
+                continueIndicator.classList.remove('hidden');
+            }
+        }
 
-        function showChoices(choices) {
-            choicesContainer.innerHTML = '';
-            document.getElementById('choice-question').innerText = "Pilih Responsmu:";
-            
-            choices.forEach((choice, index) => {
-                const btn = document.createElement('button');
-                btn.className = "choice-btn w-full text-white font-bold py-4 px-6 rounded-lg text-left text-lg opacity-0";
-                btn.style.animation = `slide-in-right 0.4s ease-out forwards ${index * 0.15}s`;
-                btn.innerText = choice.text;
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    playChoiceSound();
-                    choicesUI.classList.add('hidden');
-                    loadNode(choice.next);
-                };
-                choicesContainer.appendChild(btn);
-            });
-            choicesUI.classList.remove('hidden');
-        }
+        function showChoices(choices) {
+            choicesContainer.innerHTML = '';
+            document.getElementById('choice-question').innerText = "Pilih Responsmu:";
+            
+            choices.forEach((choice, index) => {
+                const btn = document.createElement('button');
+                btn.className = "choice-btn w-full text-white font-bold py-4 px-6 rounded-lg text-left text-lg opacity-0";
+                btn.style.animation = `slide-in-right 0.4s ease-out forwards ${index * 0.15}s`;
+                btn.innerText = choice.text;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    playChoiceSound();
+                    choicesUI.classList.add('hidden');
+                    loadNode(choice.next);
+                };
+                choicesContainer.appendChild(btn);
+            });
+            choicesUI.classList.remove('hidden');
+        }
 
-        // Handle clicks on the dialogue box to advance
-        dialogueBox.addEventListener('click', () => {
-            if (choicesUI.classList.contains('hidden') === false) return; 
-            
-            if (isTyping) {
-                finishTyping();
-            } else {
-                const node = story[currentNode];
-                if (node.next) {
-                    playClickSound();
-                    loadNode(node.next);
-                }
-            }
-        });
+        // Handle clicks on the dialogue box to advance
+        dialogueBox.addEventListener('click', () => {
+            if (choicesUI.classList.contains('hidden') === false) return; 
+            
+            if (isTyping) {
+                finishTyping();
+            } else {
+                const node = story[currentNode];
+                if (node.next) {
+                    playClickSound();
+                    loadNode(node.next);
+                }
+            }
+        });
 
-        function showEndScreen() {
-            dialogueContainer.style.display = 'none';
-            charSprite.style.opacity = '0';
-            
-            choicesContainer.innerHTML = `
-                <div class="text-center p-8 bg-black/80 backdrop-blur-md rounded-2xl border border-yellow-500/50 mt-10">
-                    <h2 class="font-serif text-4xl md:text-5xl text-yellow-400 font-bold mb-4 text-glow tracking-wider">TAMAT</h2>
-                    <p class="text-gray-300 mb-8 text-base">Terima kasih sudah memainkan memori ini.</p>
-                    <button onclick="location.reload()" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-10 rounded-lg text-lg transition-transform hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.5)] flex items-center gap-2 mx-auto">
-                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i> MAIN ULANG
-                    </button>
-                </div>
-            `;
-            document.getElementById('choice-question').style.display = 'none';
-            choicesUI.classList.remove('hidden');
-            lucide.createIcons();
-        }
+        function showEndScreen() {
+            dialogueContainer.style.display = 'none';
+            charSprite.style.opacity = '0';
+            
+            choicesContainer.innerHTML = `
+                <div class="text-center p-8 bg-black/80 backdrop-blur-md rounded-2xl border border-yellow-500/50 mt-10">
+                    <h2 class="font-serif text-4xl md:text-5xl text-yellow-400 font-bold mb-4 text-glow tracking-wider">TAMAT</h2>
+                    <p class="text-gray-300 mb-8 text-base">Terima kasih sudah memainkan memori ini.</p>
+                    <button onclick="location.reload()" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-10 rounded-lg text-lg transition-transform hover:scale-105 shadow-[0_0_20px_rgba(234,179,8,0.5)] flex items-center gap-2 mx-auto">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i> MAIN ULANG
+                    </button>
+                </div>
+            `;
+            document.getElementById('choice-question').style.display = 'none';
+            choicesUI.classList.remove('hidden');
+            lucide.createIcons();
+        }
 
-        // --- CONFETTI SYSTEM ---
-        const confCanvas = document.getElementById('confetti-canvas');
-        const confCtx = confCanvas.getContext('2d');
-        let confWidth, confHeight;
-        let conficles = [];
-        let reqAnim;
+        // --- CONFETTI SYSTEM ---
+        const confCanvas = document.getElementById('confetti-canvas');
+        const confCtx = confCanvas.getContext('2d');
+        let confWidth, confHeight;
+        let conficles = [];
+        let reqAnim;
 
-        function resizeConf() {
-            const container = document.getElementById('game-container');
-            confWidth = confCanvas.width = container.clientWidth;
-            confHeight = confCanvas.height = container.clientHeight;
-        }
-        window.addEventListener('resize', resizeConf); 
-        resizeConf();
+        function resizeConf() {
+            const container = document.getElementById('game-container');
+            confWidth = confCanvas.width = container.clientWidth;
+            confHeight = confCanvas.height = container.clientHeight;
+        }
+        window.addEventListener('resize', resizeConf); 
+        resizeConf();
 
-        const colors = ['#FBBF24', '#FCD34D', '#10B981', '#34D399', '#ffffff'];
+        const colors = ['#FBBF24', '#FCD34D', '#10B981', '#34D399', '#ffffff'];
 
-        class Confetti {
-            constructor() {
-                this.x = Math.random() * confWidth;
-                this.y = Math.random() * confHeight - confHeight;
-                this.size = Math.random() * 8 + 4;
-                this.vx = (Math.random() - 0.5) * 3;
-                this.vy = Math.random() * 2 + 1.5;
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.rot = Math.random() * 360;
-                this.rotSpeed = (Math.random() - 0.5) * 5;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy; this.rot += this.rotSpeed;
-                if(this.y > confHeight) { this.y = -10; this.x = Math.random() * confWidth; }
-            }
-            draw() {
-                confCtx.save();
-                confCtx.translate(this.x, this.y); confCtx.rotate(this.rot * Math.PI / 180);
-                confCtx.fillStyle = this.color;
-                if(Math.random() > 0.5) {
-                    confCtx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-                } else {
-                    confCtx.beginPath();
-                    confCtx.arc(0, 0, this.size/2, 0, Math.PI * 2);
-                    confCtx.fill();
-                }
-                confCtx.restore();
-            }
-        }
+        class Confetti {
+            constructor() {
+                this.x = Math.random() * confWidth;
+                this.y = Math.random() * confHeight - confHeight;
+                this.size = Math.random() * 8 + 4;
+                this.vx = (Math.random() - 0.5) * 3;
+                this.vy = Math.random() * 2 + 1.5;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.rot = Math.random() * 360;
+                this.rotSpeed = (Math.random() - 0.5) * 5;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy; this.rot += this.rotSpeed;
+                if(this.y > confHeight) { this.y = -10; this.x = Math.random() * confWidth; }
+            }
+            draw() {
+                confCtx.save();
+                confCtx.translate(this.x, this.y); confCtx.rotate(this.rot * Math.PI / 180);
+                confCtx.fillStyle = this.color;
+                if(Math.random() > 0.5) {
+                    confCtx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                } else {
+                    confCtx.beginPath();
+                    confCtx.arc(0, 0, this.size/2, 0, Math.PI * 2);
+                    confCtx.fill();
+                }
+                confCtx.restore();
+            }
+        }
 
-        function startConfetti() {
-            cancelAnimationFrame(reqAnim);
-            resizeConf(); 
-            conficles = [];
-            for(let i=0; i<80; i++) conficles.push(new Confetti());
-            animateConfetti();
-        }
+        function startConfetti() {
+            cancelAnimationFrame(reqAnim);
+            resizeConf(); 
+            conficles = [];
+            for(let i=0; i<80; i++) conficles.push(new Confetti());
+            animateConfetti();
+        }
 
-        function animateConfetti() {
-            confCtx.clearRect(0, 0, confWidth, confHeight);
-            conficles.forEach(c => { c.update(); c.draw(); });
-            reqAnim = requestAnimationFrame(animateConfetti);
-        }
+        function animateConfetti() {
+            confCtx.clearRect(0, 0, confWidth, confHeight);
+            conficles.forEach(c => { c.update(); c.draw(); });
+            reqAnim = requestAnimationFrame(animateConfetti);
+        }
 
-    </script>
+    </script>
 </body>
 </html>
