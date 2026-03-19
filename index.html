@@ -701,7 +701,10 @@
         function showEndScreen() {
             charSprite.style.opacity = '0';
             choicesContainer.innerHTML = `
-                <button onclick="returnToHome()" class="w-full bg-emerald-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 mt-4 shadow-lg">
+                <button onclick="window.open('https://zletter.vercel.app/', '_blank')" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg mb-2 transition-transform active:scale-95">
+                    <i data-lucide="mail" class="w-5 h-5"></i> BACA SURAT (ZLetter)
+                </button>
+                <button onclick="returnToHome()" class="w-full bg-slate-800 border border-slate-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95">
                     <i data-lucide="home" class="w-5 h-5"></i> KEMBALI KE MENU
                 </button>
             `;
