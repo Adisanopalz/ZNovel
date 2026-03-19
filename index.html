@@ -2,316 +2,325 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Visual Novel: Memori LDR</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Font Baru: Poppins untuk UI modern & Playfair untuk elemen sinematik -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --app-height: 100vh;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #030712; /* Background luar super gelap */
-            background-image: radial-gradient(circle at 50% 50%, #1f2937 0%, #030712 100%);
+            background-color: #030712;
             margin: 0;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            height: 100dvh; /* Dynamic viewport untuk mobile (mengatasi address bar) */
+            height: var(--app-height);
             color: white;
+            touch-action: manipulation; /* Mencegah double-tap zoom di HP */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
+        .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* Game Container: Desain layaknya frame game modern */
-        #game-container {
+        /* Container utama seperti layar HP */
+        #app-container {
             width: 100%;
             height: 100%;
-            max-width: 1400px; 
+            max-width: 480px; /* Ukuran optimal mobile layout */
             position: relative;
             background-color: #000;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
         }
 
         @media (min-width: 768px) {
-            #game-container {
+            #app-container {
                 height: 90vh;
-                border-radius: 24px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 32px;
+                border: 4px solid #1f2937;
             }
         }
 
-        /* --- 1. BACKGROUND THEMES (TIDAK DIUBAH SAMA SEKALI) --- */
-        .bg-system { 
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); 
-            background-size: cover; background-position: center;
+        /* --- SCREEN MANAGEMENT --- */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            background-color: #030712;
         }
-        .bg-awkward { 
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); 
-            background-size: cover; background-position: center;
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 20;
         }
-        .bg-jogja { 
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); 
-            background-size: cover; background-position: center;
+
+        /* --- BACKGROUND THEMES --- */
+        .bg-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+            z-index: 1;
         }
-        .bg-eid { 
-            background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); 
-            background-size: cover; background-position: center;
-        }
+        .bg-system { background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); }
+        .bg-awkward { background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); }
+        .bg-jogja { background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); }
+        .bg-eid { background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif'); }
         
-        @keyframes bgZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
+        @keyframes bgPan {
+            0% { transform: scale(1.05) translateX(-1%); }
+            100% { transform: scale(1.05) translateX(1%); }
         }
-        .bg-active {
-            animation: bgZoom 30s ease-in-out infinite alternate;
+        .bg-active { animation: bgPan 20s ease-in-out infinite alternate; }
+
+        /* Overlay gelap agar teks terbaca tanpa backdrop-filter berat */
+        .overlay-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(3,7,18,0.3) 0%, rgba(3,7,18,0.6) 60%, rgba(3,7,18,0.95) 100%);
+            z-index: 2;
         }
 
-        /* --- UI GLASSMORPHISM MODERN --- */
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* --- UI COMPONENTS (Optimized for Mobile Performance) --- */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s active;
         }
-
-        .glass-button {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-button:hover {
-            background: rgba(16, 185, 129, 0.2);
-            border-color: rgba(16, 185, 129, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        .glass-btn:active {
+            transform: scale(0.95);
+            background: rgba(16, 185, 129, 0.3);
         }
 
         /* Typewriter Cursor */
         .cursor {
             display: inline-block;
-            width: 6px;
-            height: 20px;
+            width: 5px; height: 18px;
             background-color: #10b981;
             animation: blink 1s step-end infinite;
             vertical-align: text-bottom;
             margin-left: 4px;
-            border-radius: 2px;
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         /* --- CHARACTER SPRITE --- */
         #sprite-layer {
             position: absolute;
-            bottom: 0;
+            bottom: 22%; /* Tepat di atas kotak dialog */
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 60%;
             display: flex;
-            justify-content: center; /* Default untuk mobile (di tengah) */
+            justify-content: center;
             align-items: flex-end; 
             pointer-events: none;
             z-index: 10;
         }
 
-        /* Di Desktop, letakkan karakter agak ke kiri agar tidak menutupi teks */
-        @media (min-width: 768px) {
-            #sprite-layer {
-                justify-content: flex-start;
-                padding-left: 8%;
-            }
-        }
-
         #char-sprite {
-            max-height: 60%; /* Skala lebih kecil untuk mobile agar tak tertutup kotak dialog */
+            max-height: 100%;
             max-width: 90%;
             object-fit: contain;
             transform-origin: bottom center;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-out;
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
-        }
-
-        @media (min-width: 768px) {
-            #char-sprite {
-                max-height: 85%; /* Kembali besar di layar desktop */
-            }
+            transition: opacity 0.3s ease;
+            will-change: transform, opacity;
+            /* Filter dihapus agar 60fps mulus di HP menengah ke bawah */
         }
 
         @keyframes breathe {
-            0%, 100% { transform: scaleY(1) scaleX(1); }
-            50% { transform: scaleY(1.015) scaleX(0.99); }
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.02); }
         }
-        .anim-breathe { animation: breathe 4s ease-in-out infinite; }
-
+        .anim-breathe { animation: breathe 3s ease-in-out infinite; }
+        .anim-shake { animation: shake 0.4s ease-in-out; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-10px) rotate(-1deg); }
-            40% { transform: translateX(10px) rotate(1deg); }
-            60% { transform: translateX(-10px) rotate(-1deg); }
-            80% { transform: translateX(10px) rotate(1deg); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
         }
-        .anim-shake { animation: shake 0.4s ease-in-out; }
-
+        .anim-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes pop {
-            0% { transform: scale(0.95) translateY(20px); opacity: 0;}
-            50% { transform: scale(1.02) translateY(-5px); opacity: 1;}
+            0% { transform: scale(0.9) translateY(20px); opacity: 0;}
             100% { transform: scale(1) translateY(0); opacity: 1;}
         }
-        .anim-pop { animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* --- VN DIALOGUE UI --- */
-        #dialogue-container {
+        /* --- BOTTOM SHEET DIALOGUE --- */
+        #dialogue-ui {
             position: absolute;
+            bottom: 0; left: 0; right: 0;
             z-index: 30;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-            bottom: 0;
-            padding: 1rem;
-        }
-
-        /* Layout Dialogue Desktop: Mengambang di kanan bawah */
-        @media (min-width: 768px) {
-            #dialogue-container {
-                width: 55%;
-                right: 4%;
-                bottom: 6%;
-                padding: 0;
-            }
-        }
-
-        .dialogue-box {
-            position: relative;
+            padding: 1.5rem;
+            padding-top: 2.5rem;
+            background: #0f172a;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            min-height: 180px;
             cursor: pointer;
-            padding: 1.5rem 1.25rem 1.25rem 1.25rem; /* Padding efisien untuk mobile */
-            border-radius: 20px;
-            min-height: 120px;
-        }
-
-        @media (min-width: 768px) {
-            .dialogue-box {
-                padding: 2rem 2.5rem;
-                border-radius: 24px;
-                min-height: 160px;
-            }
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
         }
 
         .name-badge {
             position: absolute;
-            top: -14px;
-            left: 16px;
-            padding: 4px 16px;
+            top: -16px; left: 20px;
+            padding: 6px 20px;
             border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255,255,255,0.2);
+            font-weight: 800; font-size: 0.9rem;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            background: linear-gradient(90deg, #10b981, #059669);
             color: white;
-            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        @media (min-width: 768px) {
-            .name-badge {
-                top: -18px;
-                left: 32px;
-                padding: 6px 20px;
-                font-size: 1rem;
-            }
-        }
-
-        @keyframes box-bump {
+        /* Minigame Heart Pulse */
+        @keyframes heartPulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+            50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        .anim-bump { animation: box-bump 0.2s ease-out; }
-
-        @keyframes slide-up-fade {
-            0% { transform: translateY(20px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        /* --- CHOICES UI --- */
-        #choices-ui {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-        }
+        .heart-pulse { animation: heartPulse 1s infinite; }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <!-- 1. Background Layer -->
-        <div id="bg-layer" class="absolute inset-0 bg-system bg-active">
-            <!-- Overlay gelap untuk meningkatkan kontras teks -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-        </div>
-
-        <canvas id="confetti-canvas" class="hidden absolute inset-0 z-40 pointer-events-none"></canvas>
-
-        <!-- 2. Sprite Layer -->
-        <div id="sprite-layer">
-            <img id="char-sprite" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E" alt="Karakter Adisa" class="anim-breathe opacity-0">
-        </div>
+    <div id="app-container">
         
-        <!-- 3. Classic VN Dialogue Box (Redesigned) -->
-        <div id="dialogue-container" style="display: none;">
-            <div class="dialogue-box glass-panel" id="dialogue-box">
+        <!-- ==================== 1. HOME SCREEN ==================== -->
+        <div id="screen-home" class="screen active bg-cover bg-center" style="background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif');">
+            <div class="absolute inset-0 bg-black/70"></div>
+            
+            <div class="relative z-10 flex flex-col items-center justify-between h-full py-12 px-6">
+                <!-- Header / Title (Easter egg trigger on title click) -->
+                <div class="text-center mt-10" id="easter-egg-trigger">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 mb-4 border border-emerald-500/30">
+                        <i data-lucide="infinity" class="w-8 h-8"></i>
+                    </div>
+                    <h1 class="font-serif text-5xl font-bold text-white mb-2 tracking-wider">Memori<br>LDR</h1>
+                    <p class="text-emerald-400 text-sm uppercase tracking-[0.3em] font-medium">Adisa & Zulian</p>
+                </div>
+
+                <!-- Main Menu Buttons -->
+                <div class="w-full flex flex-col gap-4 max-w-sm">
+                    <button onclick="startGame()" class="w-full bg-emerald-500 text-white font-bold py-4 rounded-2xl text-lg flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-lg shadow-emerald-500/30">
+                        <i data-lucide="play-circle" class="w-6 h-6"></i> MULAI CERITA
+                    </button>
+                    
+                    <button onclick="alert('Fitur galeri masih dikunci. Mainkan cerita untuk membuka memori!')" class="w-full glass-btn text-gray-200 font-semibold py-4 rounded-2xl text-base flex items-center justify-center gap-2">
+                        <i data-lucide="image" class="w-5 h-5"></i> GALERI MEMORI
+                    </button>
+                    
+                    <button id="btn-secret" onclick="startMinigame()" class="hidden w-full bg-pink-600 text-white font-bold py-4 rounded-2xl text-base flex items-center justify-center gap-2 animate-bounce mt-4 shadow-lg shadow-pink-500/30">
+                        <i data-lucide="heart" class="w-5 h-5 fill-current"></i> PESAN RAHASIA
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 2. STORY SCREEN ==================== -->
+        <div id="screen-story" class="screen">
+            <!-- Background -->
+            <div id="bg-layer" class="bg-layer bg-system bg-active"></div>
+            <div class="overlay-gradient"></div>
+            
+            <canvas id="confetti-canvas" class="hidden absolute inset-0 z-40 pointer-events-none"></canvas>
+
+            <!-- Menu In-Game (Pojok Kanan Atas) -->
+            <button onclick="returnToHome()" class="absolute top-6 right-6 z-50 glass-btn p-3 rounded-full text-white">
+                <i data-lucide="home" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Sprite Karakter -->
+            <div id="sprite-layer">
+                <img id="char-sprite" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E" alt="Karakter" class="anim-breathe opacity-0">
+            </div>
+
+            <!-- Dialogue Bottom Sheet -->
+            <div id="dialogue-ui" onclick="handleDialogueClick()">
                 <div id="speaker-name" class="name-badge">Sistem</div>
-                
-                <div class="mt-1 md:mt-2 text-base md:text-xl leading-relaxed text-gray-100 font-medium">
+                <div class="text-base md:text-lg leading-relaxed text-gray-100 font-medium">
                     <span id="dialogue-text"></span><span class="cursor" id="type-cursor"></span>
                 </div>
-                
-                <!-- Game UI Decor -->
-                <div class="absolute bottom-3 right-4 md:bottom-4 md:right-6 flex items-center gap-1 md:gap-2 opacity-50">
-                    <span class="text-[9px] md:text-[10px] uppercase text-gray-300 font-bold tracking-widest">Klik Lanjut</span>
-                    <i id="continue-indicator" data-lucide="chevrons-right" class="w-4 h-4 md:w-5 md:h-5 text-emerald-400 animate-pulse hidden"></i>
+                <div class="absolute bottom-4 right-6 flex items-center gap-1 opacity-60">
+                    <span class="text-[10px] uppercase text-emerald-400 font-bold tracking-widest">Tap Layar</span>
+                    <i id="continue-indicator" data-lucide="corner-right-down" class="w-4 h-4 text-emerald-400 animate-bounce hidden"></i>
+                </div>
+            </div>
+
+            <!-- Choices UI -->
+            <div id="choices-ui" class="absolute inset-0 z-50 hidden flex-col items-center justify-end p-4 pb-10 bg-black/80 backdrop-blur-sm">
+                <div class="w-full max-w-sm">
+                    <h3 class="font-serif text-emerald-400 font-bold mb-6 text-2xl text-center" id="choice-question">Pilih Respons:</h3>
+                    <div id="choices-container" class="flex flex-col gap-3">
+                        <!-- Pilihan akan dimasukkan lewat JS -->
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 4. Choices UI (Redesigned) -->
-        <div id="choices-ui" class="absolute inset-0 z-50 hidden flex-col items-center justify-center p-4 md:p-6 gap-4 md:gap-6">
-            <div class="glass-panel p-6 md:p-8 rounded-[2rem] md:rounded-3xl w-full max-w-xl text-center shadow-2xl">
-                <h3 class="font-serif text-white font-bold mb-6 md:mb-8 text-xl md:text-3xl text-glow" id="choice-question">...</h3>
-                <div id="choices-container" class="flex flex-col gap-3 md:gap-4">
-                    <!-- Buttons injected via JS -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- 5. Start Screen (Redesigned) -->
-        <div id="start-screen" class="absolute inset-0 z-[100] flex flex-col items-center justify-center p-4 md:p-6 bg-cover bg-center" style="background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/588a44195922117.66168b374ece8.gif');">
-            <!-- Blur Backdrop -->
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <!-- ==================== 3. MINIGAME SCREEN (EASTER EGG) ==================== -->
+        <div id="screen-minigame" class="screen bg-slate-900">
+            <div class="absolute inset-0 bg-pink-900/20 pattern-dots"></div>
             
-            <div class="glass-panel p-8 sm:p-10 md:p-16 rounded-[2rem] md:rounded-3xl w-full max-w-lg text-center relative z-10 flex flex-col items-center shadow-[0_0_50px_rgba(16,185,129,0.1)] border border-emerald-500/20">
-                <div class="bg-emerald-500/20 p-3 md:p-4 rounded-full mb-5 md:mb-6 border border-emerald-500/30">
-                    <i data-lucide="infinity" class="w-8 h-8 md:w-10 md:h-10 text-emerald-400"></i>
-                </div>
-                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2 tracking-wide drop-shadow-lg">Memori LDR</h1>
-                <p class="text-emerald-300/80 mb-8 md:mb-12 text-sm md:text-lg uppercase tracking-[0.2em] font-medium">Adisa x Zulian</p>
-                
-                <button onclick="startGame()" class="group bg-white text-gray-900 hover:bg-emerald-400 hover:text-white font-bold py-3 px-6 md:py-4 md:px-12 rounded-full text-base md:text-lg transition-all duration-300 hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center w-full sm:w-auto gap-2 md:gap-3">
-                    <i data-lucide="play" class="w-5 h-5 fill-current transition-transform group-hover:translate-x-1"></i> MULAI MEMORI
+            <div class="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
+                <button onclick="returnToHome()" class="absolute top-6 left-6 text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
-                <p class="text-[10px] md:text-xs text-gray-400 mt-6 md:mt-8 font-medium tracking-wide">Direkomendasikan pakai Headset 🎧</p>
+
+                <div id="minigame-intro">
+                    <h2 class="font-serif text-3xl font-bold text-pink-400 mb-4">Ujian LDR</h2>
+                    <p class="text-gray-300 text-sm mb-10">Jarak memisahkan kalian. Tap hati ini secepat mungkin untuk menyatukan perasaan dan membuka pesan rahasia!</p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-800 rounded-full h-4 mb-10 border border-gray-700 overflow-hidden">
+                        <div id="love-progress" class="bg-gradient-to-r from-pink-500 to-rose-500 h-4 rounded-full transition-all duration-100" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Tap Button -->
+                    <button id="tap-heart-btn" class="w-32 h-32 rounded-full bg-pink-500 flex items-center justify-center shadow-[0_0_40px_rgba(236,72,153,0.5)] heart-pulse active:scale-90 active:bg-pink-600 transition-colors mx-auto">
+                        <i data-lucide="heart" class="w-16 h-16 text-white fill-current"></i>
+                    </button>
+                    <p class="text-xs text-pink-400 mt-4 font-bold tracking-widest animate-pulse">TAP SECEPATNYA!</p>
+                </div>
+
+                <div id="minigame-success" class="hidden flex-col items-center">
+                    <i data-lucide="mail-open" class="w-16 h-16 text-emerald-400 mb-6"></i>
+                    <h2 class="font-serif text-2xl font-bold text-white mb-4">Pesan Terbuka</h2>
+                    <div class="bg-white/10 p-6 rounded-2xl border border-white/20 text-left backdrop-blur-md">
+                        <p class="text-sm text-gray-200 italic leading-relaxed">
+                            "Meskipun chat kadang sepi dan kita sama-sama gengsi buat mulai duluan, memori pertemuan singkat itu udah cukup buat jadi alasan kenapa aku bertahan sampai tahun ke-4 ini.<br><br>Semoga jarak cepat hilang ya, Zul."<br><br>- Adisa
+                        </p>
+                    </div>
+                    <button onclick="returnToHome()" class="mt-8 bg-white text-gray-900 font-bold py-3 px-8 rounded-full text-sm">Kembali ke Menu</button>
+                </div>
             </div>
         </div>
+
     </div>
 
     <script>
         lucide.createIcons();
+
+        // Fix Viewport Height issue on Mobile Safari/Chrome
+        const appHeight = () => {
+            const doc = document.documentElement;
+            doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+        window.addEventListener('resize', appHeight);
+        appHeight();
 
         // --- AUDIO ENGINE ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -328,8 +337,8 @@
             const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(800 + Math.random() * 200, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(600 + Math.random() * 300, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
             osc.start(); osc.stop(audioCtx.currentTime + 0.02);
         }
@@ -340,72 +349,120 @@
             const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
             osc.start(); osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        function playChoiceSound() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
-            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        // --- SCREEN NAVIGATION ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('screen-' + screenId).classList.add('active');
         }
 
-        function playMagicSound() {
-            if (!audioCtx) return;
-            const chords = [523.25, 659.25, 783.99, 1046.50];
-            chords.forEach((freq, i) => {
+        function returnToHome() {
+            playClickSound();
+            showScreen('home');
+            // Reset game state
+            currentNode = "start";
+            charSprite.style.opacity = '0';
+            dialogueText.innerText = "";
+            choicesUI.classList.add('hidden');
+        }
+
+        // --- EASTER EGG LOGIC ---
+        let tapCount = 0;
+        let tapTimer;
+        document.getElementById('easter-egg-trigger').addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimer);
+            if (tapCount >= 5) {
+                document.getElementById('btn-secret').classList.remove('hidden');
+                tapCount = 0; // Reset
+            }
+            tapTimer = setTimeout(() => { tapCount = 0; }, 2000); // Reset if too slow
+        });
+
+        // --- MINIGAME LOGIC ---
+        let loveScore = 0;
+        let scoreDecayInterval;
+
+        function startMinigame() {
+            initAudio();
+            playClickSound();
+            showScreen('minigame');
+            
+            // Reset state
+            loveScore = 0;
+            document.getElementById('love-progress').style.width = '0%';
+            document.getElementById('minigame-intro').classList.remove('hidden');
+            document.getElementById('minigame-success').classList.add('hidden');
+            document.getElementById('minigame-success').classList.remove('flex');
+
+            clearInterval(scoreDecayInterval);
+            // Decay score to make it challenging
+            scoreDecayInterval = setInterval(() => {
+                if(loveScore > 0 && loveScore < 100) {
+                    loveScore -= 2; // turun perlahan
+                    if(loveScore < 0) loveScore = 0;
+                    document.getElementById('love-progress').style.width = loveScore + '%';
+                }
+            }, 100);
+        }
+
+        document.getElementById('tap-heart-btn').addEventListener('click', () => {
+            if (loveScore >= 100) return;
+            initAudio(); // ensure audio
+            playTypeSound(); // little tick sound
+            
+            loveScore += 10; // tambah tiap tap
+            if (loveScore >= 100) {
+                loveScore = 100;
+                clearInterval(scoreDecayInterval);
+                playClickSound();
+                
+                // Show Success
                 setTimeout(() => {
-                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.type = 'sine'; osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-                }, i * 100);
-            });
-        }
+                    document.getElementById('minigame-intro').classList.add('hidden');
+                    document.getElementById('minigame-success').classList.remove('hidden');
+                    document.getElementById('minigame-success').classList.add('flex');
+                }, 500);
+            }
+            document.getElementById('love-progress').style.width = loveScore + '%';
+        });
 
-        /* --- 2. STORY DATA & CHARACTER SPRITES (TIDAK DIUBAH SAMA SEKALI) --- */
+
+        /* --- STORY DATA (IMGUR TETAP SAMA) --- */
         const story = {
             "start": {
-                speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-system", 
+                speaker: "Sistem", color: "from-blue-600 to-blue-500", bg: "bg-system", 
                 image: 'https://assets-v2.lottiefiles.com/a/4e784ad0-f128-11ee-bbb7-b76f60dbd4ce/shoJtcsKZ0.gif', 
                 text: "Memuat memori dari: Adisa Nawfal... Target sinkronisasi: Zulian.",
                 next: "n2"
             },
             "n2": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-system", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-system", 
                 image: 'https://i.imgur.com/hWnAJkF.png', 
                 text: "Zulian Fatimatuzzahro Hurul Aini... Namamu masih aja kepanjangan buat diucapin dalam satu napas.",
-                anim: "anim-pop",
-                next: "n3"
+                anim: "anim-pop", next: "n3"
             },
             "n3": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-awkward", 
                 image: 'https://i.imgur.com/nJYAS6A.png', 
                 text: "Ga kerasa ya udah hampir 4 tahun kita LDR-an.",
-                anim: "anim-pop",
-                next: "n4",
+                anim: "anim-pop", next: "n4",
                 action: () => setBackground('bg-awkward')
             },
             "n4": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-awkward", 
                 image: 'https://i.imgur.com/IGF8TGr.png', 
                 text: "Dan lucunya, makin ke sini kita malah makin canggung. Suka ghosting-ghostingan ga jelas.",
                 next: "n5"
             },
             "n5": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-awkward", 
                 image: 'https://i.imgur.com/hWnAJkF.png', 
                 text: "Jujur-jujuran aja nih, menurut lu sekarang kita se-awkward apa sih?",
                 choices: [
@@ -414,35 +471,32 @@
                 ]
             },
             "n5A": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-awkward", 
                 image: 'https://i.imgur.com/hWnAJkF.png', 
                 text: "WKWK bener banget! Chat aja sebulan sekali itupun balesannya 'Oh', 'Y', 'Ok'.",
-                anim: "anim-shake",
-                next: "n6"
+                anim: "anim-shake", next: "n6"
             },
             "n5B": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-awkward", 
                 image: 'https://i.imgur.com/3e7GvjQ.png', 
                 text: "Valid! Tiap mau nge-chat mikirin topiknya lama bener, takut salah ngomong.",
-                anim: "anim-shake",
-                next: "n6"
+                anim: "anim-shake", next: "n6"
             },
             "n6": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-awkward", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-awkward", 
                 image: 'https://i.imgur.com/hWnAJkF.png', 
                 text: "Tapi, di balik semua chat kering dan kecanggungan kita...",
                 next: "n7"
             },
             "n7": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/nJYAS6A.png', 
                 text: "Ada satu memori absurd yang paling nempel di otak gw sampai sekarang.",
-                anim: "anim-pop",
-                next: "n8",
+                anim: "anim-pop", next: "n8",
                 action: () => setBackground('bg-jogja')
             },
             "n8": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/hWnAJkF.png', 
                 text: "Coba tebak, memori absurd apa yang gw maksud?",
                 choices: [
@@ -451,14 +505,13 @@
                 ]
             },
             "n8A": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/3e7GvjQ.png', 
                 text: "Halu lu ah. Kapan kita deep talk? Yang ada saling diam overthinking wkwk.",
-                anim: "anim-shake",
-                next: "n8_retry"
+                anim: "anim-shake", next: "n8_retry"
             },
             "n8_retry": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/IGF8TGr.png', 
                 text: "Coba tebak yang bener dong.",
                 choices: [
@@ -466,56 +519,51 @@
                 ]
             },
             "n8B": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/nJYAS6A.png', 
                 text: "NAH INI! Valid banget wkwk. 😂",
-                anim: "anim-shake",
-                next: "n9"
+                anim: "anim-shake", next: "n9"
             },
             "n9": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/nJYAS6A.png', 
                 text: "Waktu itu gw beneran nekat banget ke Jogja cuma buat nyamperin lu bentar.",
                 next: "n10"
             },
             "n10": {
-                speaker: "Adisa", color: "from-emerald-600 to-emerald-400", bg: "bg-jogja", 
+                speaker: "Adisa", color: "from-emerald-600 to-emerald-500", bg: "bg-jogja", 
                 image: 'https://i.imgur.com/hWnAJkF.png', 
                 text: "Walaupun pertemuannya ga nyampe sejam... Sejam itu literally momen paling berharga buat gw.",
-                anim: "anim-pop",
-                next: "n11"
+                anim: "anim-pop", next: "n11"
             },
             "n11": {
-                speaker: "Sistem", color: "from-blue-600 to-blue-400", bg: "bg-eid", 
+                speaker: "Sistem", color: "from-blue-600 to-blue-500", bg: "bg-eid", 
                 image: 'https://assets-v2.lottiefiles.com/a/4e784ad0-f128-11ee-bbb7-b76f60dbd4ce/shoJtcsKZ0.gif', 
                 text: "Mendeteksi perubahan emosi... Mengubah environment ke mode: Lebaran 1445 H...",
                 next: "n12",
                 action: () => {
                     setBackground('bg-eid');
-                    playMagicSound();
                     document.getElementById('confetti-canvas').classList.remove('hidden');
                     startConfetti();
                 }
             },
             "n12": {
-                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
+                speaker: "Adisa", color: "from-yellow-600 to-yellow-500", bg: "bg-eid", 
                 image: 'https://i.imgur.com/m1HbQid.png', 
                 text: "Minal aidin wal faizin ya, Zul. Mohon maaf lahir dan batin atas segala salah dan khilaf. 🙏",
-                anim: "anim-pop",
-                next: "n13"
+                anim: "anim-pop", next: "n13"
             },
             "n13": {
-                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
+                speaker: "Adisa", color: "from-yellow-600 to-yellow-500", bg: "bg-eid", 
                 image: 'https://i.imgur.com/nJYAS6A.png', 
                 text: "Semoga lu sehat terus, makin sukses, dan ke depannya kita ga se-awkward ini lagi ya wkwk.",
                 next: "n14"
             },
             "n14": {
-                speaker: "Adisa", color: "from-yellow-500 to-yellow-300", bg: "bg-eid", 
+                speaker: "Adisa", color: "from-yellow-600 to-yellow-500", bg: "bg-eid", 
                 image: 'https://i.imgur.com/ewkY0Ft.png', 
                 text: "Taqabbalallahu minna wa minkum. Dari cowok yang ke Jogja cuma numpang napas, Adisa Nawfal. ✨",
-                anim: "anim-pop",
-                next: "end"
+                anim: "anim-pop", next: "end"
             }
         };
 
@@ -527,8 +575,6 @@
         let charIndex = 0;
 
         // --- DOM ELEMENTS ---
-        const dialogueContainer = document.getElementById('dialogue-container');
-        const dialogueBox = document.getElementById('dialogue-box');
         const speakerName = document.getElementById('speaker-name');
         const dialogueText = document.getElementById('dialogue-text');
         const continueIndicator = document.getElementById('continue-indicator');
@@ -538,38 +584,15 @@
         const charSprite = document.getElementById('char-sprite');
         const typeCursor = document.getElementById('type-cursor');
 
-        // Preload Images
-        function preloadImages() {
-            Object.values(story).forEach(node => {
-                if(node.image) {
-                    const img = new Image();
-                    img.src = node.image;
-                }
-            });
-        }
-
         function startGame() {
             initAudio();
-            preloadImages();
-            
-            // Animasi Start Screen menghilang
-            const startScreen = document.getElementById('start-screen');
-            startScreen.style.transition = "opacity 0.5s ease";
-            startScreen.style.opacity = "0";
-            
-            setTimeout(() => {
-                startScreen.style.display = 'none';
-                dialogueContainer.style.display = 'block';
-                dialogueContainer.style.animation = "slide-up-fade 0.5s ease-out forwards";
-                playClickSound();
-                loadNode("start");
-            }, 500);
+            playClickSound();
+            showScreen('story');
+            loadNode("start");
         }
 
         function setBackground(bgClass) {
-            bgLayer.className = `absolute inset-0 bg-active ${bgClass}`;
-            // Mempertahankan shadow gelap
-            bgLayer.innerHTML = `<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>`;
+            bgLayer.className = `bg-layer bg-active ${bgClass}`;
         }
 
         function setSprite(imageSrc, animClass) {
@@ -579,7 +602,6 @@
             setTimeout(() => {
                 charSprite.src = imageSrc;
                 charSprite.style.opacity = '1';
-                
                 if (animClass) {
                     void charSprite.offsetWidth; 
                     charSprite.classList.add(animClass);
@@ -598,15 +620,10 @@
 
             if (node.action) node.action();
 
-            // Set UI
             speakerName.innerText = node.speaker;
             speakerName.className = `name-badge bg-gradient-to-r ${node.color}`;
             
             if(node.image) setSprite(node.image, node.anim);
-            
-            dialogueBox.classList.remove('anim-bump');
-            void dialogueBox.offsetWidth;
-            dialogueBox.classList.add('anim-bump');
             
             currentText = node.text;
             startTyping();
@@ -647,38 +664,28 @@
 
         function showChoices(choices) {
             choicesContainer.innerHTML = '';
-            document.getElementById('choice-question').innerText = "Tentukan Pilihanmu";
             
             choices.forEach((choice, index) => {
                 const btn = document.createElement('button');
-                btn.className = "glass-button w-full text-white font-medium py-3 px-5 md:py-4 md:px-6 rounded-xl md:rounded-2xl text-left text-base md:text-lg flex items-center justify-between group opacity-0";
-                btn.style.animation = `slide-up-fade 0.4s ease-out forwards ${index * 0.15}s`;
-                
-                btn.innerHTML = `
-                    <span>${choice.text}</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-emerald-400 transition-transform group-hover:translate-x-1"></i>
-                `;
+                btn.className = "w-full bg-slate-800 border border-slate-600 text-white font-medium py-4 px-6 rounded-2xl text-left text-sm md:text-base flex justify-between items-center active:bg-emerald-600 transition-colors";
+                btn.innerHTML = `<span>${choice.text}</span><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-400"></i>`;
                 
                 btn.onclick = (e) => {
                     e.stopPropagation();
-                    playChoiceSound();
-                    choicesUI.style.opacity = '0';
-                    setTimeout(() => {
-                        choicesUI.classList.add('hidden');
-                        choicesUI.style.opacity = '1';
-                        loadNode(choice.next);
-                    }, 300);
+                    playClickSound();
+                    choicesUI.classList.add('hidden');
+                    loadNode(choice.next);
                 };
                 choicesContainer.appendChild(btn);
             });
             
             lucide.createIcons();
             choicesUI.classList.remove('hidden');
+            choicesUI.classList.add('flex');
         }
 
-        // Handle clicks
-        dialogueBox.addEventListener('click', () => {
-            if (choicesUI.classList.contains('hidden') === false) return; 
+        function handleDialogueClick() {
+            if (!choicesUI.classList.contains('hidden')) return; 
             
             if (isTyping) {
                 finishTyping();
@@ -689,27 +696,22 @@
                     loadNode(node.next);
                 }
             }
-        });
+        }
 
         function showEndScreen() {
-            dialogueContainer.style.display = 'none';
             charSprite.style.opacity = '0';
-            
             choicesContainer.innerHTML = `
-                <div class="mt-2 md:mt-4">
-                    <button onclick="location.reload()" class="bg-white hover:bg-emerald-400 text-gray-900 hover:text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-full text-base md:text-lg transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center gap-2 mx-auto">
-                        <i data-lucide="rotate-ccw" class="w-4 h-4 md:w-5 md:h-5"></i> ULANG MEMORI
-                    </button>
-                </div>
+                <button onclick="returnToHome()" class="w-full bg-emerald-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 mt-4 shadow-lg">
+                    <i data-lucide="home" class="w-5 h-5"></i> KEMBALI KE MENU
+                </button>
             `;
-            document.getElementById('choice-question').innerText = "Memori Selesai.";
-            document.getElementById('choice-question').className = "font-serif text-emerald-400 font-bold mb-2 md:mb-4 text-3xl md:text-5xl drop-shadow-lg";
-            
+            document.getElementById('choice-question').innerText = "Tamat. Terima kasih!";
             choicesUI.classList.remove('hidden');
+            choicesUI.classList.add('flex');
             lucide.createIcons();
         }
 
-        // --- CONFETTI SYSTEM ---
+        // --- CONFETTI (Disederhanakan untuk Mobile) ---
         const confCanvas = document.getElementById('confetti-canvas');
         const confCtx = confCanvas.getContext('2d');
         let confWidth, confHeight;
@@ -717,9 +719,8 @@
         let reqAnim;
 
         function resizeConf() {
-            const container = document.getElementById('game-container');
-            confWidth = confCanvas.width = container.clientWidth;
-            confHeight = confCanvas.height = container.clientHeight;
+            confWidth = confCanvas.width = window.innerWidth;
+            confHeight = confCanvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resizeConf); 
         resizeConf();
@@ -730,29 +731,18 @@
             constructor() {
                 this.x = Math.random() * confWidth;
                 this.y = Math.random() * confHeight - confHeight;
-                this.size = Math.random() * 8 + 4;
-                this.vx = (Math.random() - 0.5) * 3;
-                this.vy = Math.random() * 2 + 1.5;
+                this.size = Math.random() * 6 + 4;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = Math.random() * 2 + 2;
                 this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.rot = Math.random() * 360;
-                this.rotSpeed = (Math.random() - 0.5) * 5;
             }
             update() {
-                this.x += this.vx; this.y += this.vy; this.rot += this.rotSpeed;
+                this.x += this.vx; this.y += this.vy;
                 if(this.y > confHeight) { this.y = -10; this.x = Math.random() * confWidth; }
             }
             draw() {
-                confCtx.save();
-                confCtx.translate(this.x, this.y); confCtx.rotate(this.rot * Math.PI / 180);
                 confCtx.fillStyle = this.color;
-                if(Math.random() > 0.5) {
-                    confCtx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-                } else {
-                    confCtx.beginPath();
-                    confCtx.arc(0, 0, this.size/2, 0, Math.PI * 2);
-                    confCtx.fill();
-                }
-                confCtx.restore();
+                confCtx.fillRect(this.x, this.y, this.size, this.size);
             }
         }
 
@@ -760,7 +750,7 @@
             cancelAnimationFrame(reqAnim);
             resizeConf(); 
             conficles = [];
-            for(let i=0; i<80; i++) conficles.push(new Confetti());
+            for(let i=0; i<40; i++) conficles.push(new Confetti()); // Hanya 40 partikel agar enteng di HP
             animateConfetti();
         }
 
@@ -769,6 +759,11 @@
             conficles.forEach(c => { c.update(); c.draw(); });
             reqAnim = requestAnimationFrame(animateConfetti);
         }
+        
+        // Preload Image
+        Object.values(story).forEach(node => {
+            if(node.image) { const img = new Image(); img.src = node.image; }
+        });
     </script>
 </body>
 </html>
